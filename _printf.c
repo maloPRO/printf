@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
-#include <stddef.h>
 #include "main.h"
 
 /**
@@ -11,7 +10,6 @@
 */
 int _printf(const char *format, ...)
 {
-
 	int count = 0;
 	va_list args;
 
@@ -41,14 +39,17 @@ int _printf(const char *format, ...)
 				_putchar('%');
 				++count;
 			}
-			else
-			{
-				_putchar(*format);
-				++count;
-			}
-			++format;
 		}
+		else
+		{
+			_putchar(*format);
+			++count;
+		}
+		++format;
 	}
+
 	va_end(args);
+	_putchar('\n');
 	return (count);
 }
+
