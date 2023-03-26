@@ -28,6 +28,7 @@ int _printf(const char *format, ...)
 	{
 		if (*p == '%')
 		{
+<<<<<<< HEAD
 			p++;
 			if (*p == '%')
 			{
@@ -42,6 +43,35 @@ int _printf(const char *format, ...)
 				: _printf("%%%c", *p);
 		} else
 			count += _putchar(*p);
+=======
+			++format;
+			if (*format == 'c')
+			{
+				char c = (char)va_arg(args, int);
+
+				_putchar(c);
+				count++;
+			}
+			else if (*format == 's')
+			{
+				char *s = va_arg(args, char *);
+
+				fputs(s, stdout);
+				count += strlen(s);
+			}
+			else if (*format == '%')
+			{
+				_putchar('%');
+				count++;
+			}
+		}
+		else
+		{
+			putchar(*format);
+			count++;
+		}
+		++format;
+>>>>>>> 9b1aacfb415dfbc4dba21f7a14924bb2cd145150
 	}
 	_putchar(-1);
 	va_end(arguments);
