@@ -1,33 +1,58 @@
 #include "main.h"
-#include <stddef.h>
-
 /**
- * check_specifier - check that character is a valid specifier
- * and assigns an appropriate function for its printing
- * @format: the specifier (char*)
- *
- * Return: pointer to function
+ * get_print_func - selects the correct function to perform the operation.
+ * @s: argument indentifier
+ * @index: index for argument indentifier
+ * Return: pointer to a function.
  */
-
-int (*check_specifier(const char *format))(va_list)
+int (*get_print_func(const char *s, int index))(va_list, char *, unsigned int)
 {
-	int i;
+	print_t pr[] = {
+		{"c", print_chr}, {"s", print_str},
+		{"i", print_int}, {"d", print_int},
+		{"b", print_bnr}, {"u", print_unt},
+		{"o", print_oct}, {"x", print_hex},
+		{"X", print_upx}, {"S", print_usr},
+		{"p", print_add}, {"li", prinlint},
+		{"ld", prinlint}, {"lu", prinlunt},
+		{"lo", prinloct}, {"lx", prinlhex},
+		{"lX", prinlupx}, {"hi", prinhint},
+		{"hd", prinhint}, {"hu", prinhunt},
+		{"ho", prinhoct}, {"hx", prinhhex},
+		{"hX", prinhupx}, {"#o", prinnoct},
+		{"#x", prinnhex}, {"#X", prinnupx},
+		{"#i", print_int}, {"#d", print_int},
+		{"#u", print_unt}, {"+i", prinpint},
+		{"+d", prinpint}, {"+u", print_unt},
+		{"+o", print_oct}, {"+x", print_hex},
+		{"+X", print_upx}, {" i", prinsint},
+		{" d", prinsint}, {" u", print_unt},
+		{" o", print_oct}, {" x", print_hex},
+		{" X", print_upx}, {"R", print_rot},
+		{"r", print_rev}, {"%", print_prg},
+		{"l", print_prg}, {"h", print_prg},
+		{" +i", prinpint}, {" +d", prinpint},
+		{"+ i", prinpint}, {"+ d", prinpint},
+		{" %", print_prg}, {NULL, NULL},
+	};
+	int i = 0, j = 0, first_index;
 
-	funct_t print_array[6] = {
-		{"c", print_char},
-		{"s", print_str},
-		{"%", print_pcent},
-		{"d", print_dec},
-		{"i", print_int},
-		{NULL, NULL}};
-
-	for (i = 0; print_array[i].t != NULL; i++)
+	first_index = index;
+	while (pr[i].type_arg)
 	{
-		if (*print_array[i].t == *format)
+		if (s[index] == pr[i].type_arg[j])
 		{
-			return (print_array[i].f);
+			if (pr[i].type_arg[j + 1] != '\0')
+				index++, j++;
+			else
+				break;
+		}
+		else
+		{
+			j = 0;
+			i++;
+			index = first_index;
 		}
 	}
-
-	return (NULL);
+	return (pr[i].f);
 }

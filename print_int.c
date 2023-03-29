@@ -1,35 +1,42 @@
 #include "main.h"
-#include <stdarg.h>
 
 /**
- * print_int - prints a given integer from variadic parameters
- * @args: variadic parameter
- *
- * Return: number of characters printed on Success
+ * print_int - prints an integer
+ * @args: input string
+ * @buf: buffer pointer
+ * @ibuf: index for buffer pointer
+ * Return: number of chars printed.
  */
-
-int print_int(va_list args)
+int print_int(va_list args, char *buf, unsigned int ibuf)
 {
-	int i = 0;
-	int count = 0;
-	int number;
-	int print_arr[10];
+	int input;
+	unsigned int j, temp, i, div, isneg;
 
-	number = va_arg(args, int);
-
-	while (number != 0)
+	input = va_arg(args, int);
+	isneg = 0;
+	if (input < 0)
 	{
-		print_arr[i] = (number % 10);
-		number = number / 10;
-		if (number == 0)
-			break;
-		i++;
+		j = input * -1;
+		ibuf = handl_buf(buf, '-', ibuf);
+		isneg = 1;
+	}
+	else
+	{
+		j = input;
 	}
 
-	for (i = 0; i >= 0; i--)
+	temp = j;
+	div = 1;
+
+	while (temp > 9)
 	{
-		_putchar('0' + print_arr[i]);
-		count++;
+		div *= 10;
+		temp /= 10;
 	}
-	return (count);
+
+	for (i = 0; div > 0; div /= 10, i++)
+	{
+		ibuf = handl_buf(buf, ((j / div) % 10) + '0', ibuf);
+	}
+	return (i + isneg);
 }
