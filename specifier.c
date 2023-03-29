@@ -49,4 +49,3 @@ int ev_print_func(const char *s, int index)
 	}
 	return (j);
 }
-
